@@ -2,7 +2,7 @@ import pandas as pd
 import subprocess
 from openpyxl import load_workbook
 from ttkbootstrap.dialogs import Messagebox
-
+#ngetes
 class ConvertData:
     def __init__(self, **kwargs):
         self.lbl_status = kwargs['lbl_status']
