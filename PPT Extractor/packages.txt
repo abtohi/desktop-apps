@@ -8,3 +8,6 @@ pip install subprocess
 pip install os
 pip install re
 pip install pandas
+pip install shutil
+pip install functools
+pip install datetime
