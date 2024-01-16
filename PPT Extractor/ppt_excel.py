@@ -5,12 +5,14 @@ import pandas as pd
 import os
 from pptx import Presentation
 import subprocess
+import datetime
 
 class PPTExcel:
     def __init__(self, root, dtype, projectpath):
         self.root = root
         self.dtype = dtype
         self.projectpath = f'projects\\{projectpath.get()}'
+        self.logreport = []
     
     def extract_to_excel(self, **kwargs):
         selected_ppt = kwargs['ppt']
@@ -28,13 +30,14 @@ class PPTExcel:
         out = "output_data.xlsx"
         all_list = self.extract_all(ppt)
         self.save_to_excel(all_list, progress_var, out)
+        report = pd.DataFrame(self.logreport)
+        report.to_csv(f'{self.projectpath}/output/log_data_extract.csv')
         lbl_status.config(text="All Data extracted and save to "+out)
         
         result = Messagebox.yesno(title="Options",message="Your data has been successfully extracted to "+out+"\n\nDo you want to open the output?",parent=frame)
         if result == 'Yes':
             output = f'{self.projectpath}\\output\\{out}'
             subprocess.run(['start', 'excel', output], shell=True)
-
 
         progress.pack_forget()
         lbl_status.config(text='')
@@ -59,20 +62,29 @@ class PPTExcel:
                 if data_type == "Text":
                     text_frame = shape.text_frame
                     shape_name = shape.name
+                    try:
+                        # Memisahkan teks berdasarkan baris baru (new line) jika ada
+                        for paragraph in text_frame.paragraphs:
+                            text = paragraph.text.strip()
+                            text = text.replace("\x0b", "\n")
+                            if text:
+                                text_data.append([text])
 
-                    # Memisahkan teks berdasarkan baris baru (new line) jika ada
-                    for paragraph in text_frame.paragraphs:
-                        text = paragraph.text.strip()
-                        text = text.replace("\x0b", "\n")
-                        if text:
-                            text_data.append([text])
+                        # Buat DataFrame dari data teks
+                        if text_data:
+                            text_df = pd.DataFrame(text_data, columns=["Text"])
+                            shape = f'{text_df.shape[0]}x{text_df.shape[1]}'
+                            if text_df.shape[0] != 0:
+                                text_dfs[f"Slide {slide_number}#{shape_name}#{shape}"] = text_df
+                                
+                        log = {"slide_number":slide_number,"shape":shape_name,"type":"Text","status":"Success", "message":"","timestamp":self.timestamp()}
 
-                    # Buat DataFrame dari data teks
-                    if text_data:
-                        text_df = pd.DataFrame(text_data, columns=["Text"])
-                        shape = f'{text_df.shape[0]}x{text_df.shape[1]}'
-                        if text_df.shape[0] != 0:
-                            text_dfs[f"Slide {slide_number}#{shape_name}#{shape}"] = text_df
+                    except Exception as e:
+                        msg_error = str(e)
+                        log = {"slide_number":slide_number,"shape":shape_name,"type":"Text","status":"Error", "message":msg_error,"timestamp":self.timestamp()}
+
+                    self.logreport.append(log)
+
 
         return text_dfs
 
@@ -88,30 +100,38 @@ class PPTExcel:
                     table = shape.table
                     table_data = []
                     
-                    for row in table.rows:
-                        row_data = []
-                        for cell in row.cells:
-                            row_data.append(str(cell.text).replace('\x0b','\n'))
-                        table_data.append(row_data)
+                    try:
+                        for row in table.rows:
+                            row_data = []
+                            for cell in row.cells:
+                                row_data.append(str(cell.text).replace('\x0b','\n'))
+                            table_data.append(row_data)
 
-                    # Buat DataFrame dari data table
-                    columns = table_data[0]
-                    table_df = pd.DataFrame(table_data[1:], columns=table_data[0])
-                    shape = f'{table_df.shape[0]}x{table_df.shape[1]}'
+                        # Buat DataFrame dari data table
+                        columns = table_data[0]
+                        table_df = pd.DataFrame(table_data[1:], columns=table_data[0])
+                        shape = f'{table_df.shape[0]}x{table_df.shape[1]}'
 
-                    if table_df.shape[0] != 0:
+                        if table_df.shape[0] != 0:
 
-                        for i, row in table_df.iterrows():
-                            if all(cell == '' for cell in row):
-                                if i == len(table_df)-1:
-                                    table_df = table_df.drop(i)
+                            for i, row in table_df.iterrows():
+                                if all(cell == '' for cell in row):
+                                    if i == len(table_df)-1:
+                                        table_df = table_df.drop(i)
 
-                        count_true = sum(all(cell == '' for cell in row) for _, row in table_df.iterrows())
-                        length = len(table_df)
+                            count_true = sum(all(cell == '' for cell in row) for _, row in table_df.iterrows())
+                            length = len(table_df)
 
-                        if count_true != length:
-                            # Tambahkan kolom Slide Number, Data Type, dan Table Number di kolom paling depan
-                            table_dfs[f"Slide {slide_number}#{shape_name}#{shape}"] = table_df
+                            if count_true != length:
+                                # Tambahkan kolom Slide Number, Data Type, dan Table Number di kolom paling depan
+                                table_dfs[f"Slide {slide_number}#{shape_name}#{shape}"] = table_df
+                        log = {"slide_number":slide_number,"shape":shape_name,"type":"Table","status":"Success", "message":"","timestamp":self.timestamp()}
+                        
+                    except Exception as e:
+                        msg_error = str(e)
+                        log = {"slide_number":slide_number,"shape":shape_name,"type":"Table","status":"Error", "message":msg_error,"timestamp":self.timestamp()}
+
+                    self.logreport.append(log)
 
         return table_dfs
     
@@ -128,45 +148,54 @@ class PPTExcel:
                     shape_name = shape.name
                     
                     data = []
-                    for plot in chart.plots:
-                        cat = []
-                        for category in plot.categories.flattened_labels:
-                            category = cat.append(category[0])
-                        if len(cat) > 0:
-                            for iseries, series in enumerate(plot.series, start=1):
-                                for i, value in enumerate(series.values):
-                                    if i != len(cat):
-                                        index = i % len(cat)
-                                        series_name = series.name or f'Column {iseries}'
-                                        series_name = f"Column {iseries}" if series_name == "#REF!" else series_name
-                                        new_cat = "Category" if len(cat[index]) == 0 else cat[index]
-                                        new_values = round(value,2) if type(value) == float else value
-                                        data.append([series_name, new_cat, new_values])
+                    try:
+                        for plot in chart.plots:
+                            cat = []
+                            for category in plot.categories.flattened_labels:
+                                category = cat.append(category[0])
+                            if len(cat) > 0:
+                                for iseries, series in enumerate(plot.series, start=1):
+                                    for i, value in enumerate(series.values):
+                                        if i != len(cat):
+                                            index = i % len(cat)
+                                            series_name = series.name or f'Column {iseries}'
+                                            series_name = f"Column {iseries}" if series_name == "#REF!" else series_name
+                                            new_cat = "Category" if len(cat[index]) == 0 else cat[index]
+                                            new_values = round(value,2) if type(value) == float else value
+                                            data.append([series_name, new_cat, new_values])
 
-                    if chart.chart_type == 72:
-                        data = []
-                        next_idx = 1
-                        for series in chart.series:
-                            ser = series._ser
-                            cat = series.name
-                            x_pts = ser.xpath(".//c:xVal//c:pt")
-                            for pt in x_pts:
-                                str_value = pt.xpath("./c:v")[0].text
-                                value = float(str_value)
-                                idx = int(pt.get("idx"))+1
-                                while next_idx < idx:
-                                    data.append([cat, next_idx, None])
+                        if chart.chart_type == 72:
+                            data = []
+                            next_idx = 1
+                            for series in chart.series:
+                                ser = series._ser
+                                cat = series.name
+                                x_pts = ser.xpath(".//c:xVal//c:pt")
+                                for pt in x_pts:
+                                    str_value = pt.xpath("./c:v")[0].text
+                                    value = float(str_value)
+                                    idx = int(pt.get("idx"))+1
+                                    while next_idx < idx:
+                                        data.append([cat, next_idx, None])
+                                        next_idx += 1
+                                    data.append([cat, idx, value])
                                     next_idx += 1
-                                data.append([cat, idx, value])
-                                next_idx += 1
 
-                    # Buat DataFrame dari data yang telah di-stack
-                    chart_df = pd.DataFrame(data, columns=["Legend", "Categories", "Values"])
+                        # Buat DataFrame dari data yang telah di-stack
+                        chart_df = pd.DataFrame(data, columns=["Legend", "Categories", "Values"])
 
-                    # Mengganti nama indeks dan kolom
-                    shape = f'{chart_df.shape[0]}x{chart_df.shape[1]}'
-                    if chart_df.shape[0] != 0:
-                        chart_dfs[f"Slide {slide_number}#{shape_name}#{shape}#{chart.chart_type}"] = chart_df
+                        # Mengganti nama indeks dan kolom
+                        shape = f'{chart_df.shape[0]}x{chart_df.shape[1]}'
+                        if chart_df.shape[0] != 0:
+                            chart_dfs[f"Slide {slide_number}#{shape_name}#{shape}#{chart.chart_type}"] = chart_df
+                    
+                        log = {"slide_number":slide_number,"shape":shape_name,"type":"Chart","status":"Success", "message":"","timestamp":self.timestamp()}
+                        
+                    except Exception as e:
+                        msg_error = str(e)
+                        log = {"slide_number":slide_number,"shape":shape_name,"type":"Chart","status":"Error", "message":msg_error,"timestamp":self.timestamp()}
+
+                    self.logreport.append(log)
 
         return chart_dfs
     
@@ -218,3 +247,8 @@ class PPTExcel:
         # Mengubah hasilnya menjadi huruf kecil
         cleaned_string = cleaned_string.lower() 
         return cleaned_string
+    
+    def timestamp(self):
+        current_time = datetime.datetime.now()
+        time_stamp = current_time.strftime("%Y-%m-%d %H:%M:%S")
+        return time_stamp
