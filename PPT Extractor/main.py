@@ -17,6 +17,7 @@ from sync import Synchronize
 from reconvert_data import ReConvert
 from display.menu import Menu
 
+#Kelas display, untuk tampilan aplikasi
 class Display:
     def __init__(self):
         self.extracted_text_dfs = {}
