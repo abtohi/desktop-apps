@@ -17,7 +17,7 @@ from sync import Synchronize
 from reconvert_data import ReConvert
 from display.menu import Menu
 
-#Kelas display, untuk tampilan aplikasi
+#Display class for layouting
 class Display:
     def __init__(self):
         self.extracted_text_dfs = {}
@@ -295,12 +295,12 @@ if __name__ == "__main__":
 
     style = Style(theme="litera")
 
-    root.title("Powerpoint Extractor v1.5")
+    root.title("Powerpoint Extractor")
     root.resizable(width=False, height=True)
 
-    dpi_ori  = 96
-    dpi_user = root.winfo_fpixels('1i')
-    scaled = lambda x: round(x * (dpi_user / dpi_ori))
+    dpi_ori  = 96 #dpi standard for many displays (DPI means dots per inch)
+    dpi_user = root.winfo_fpixels('1i') #retrieves the current user's dpi (1 inch)
+    scaled = lambda x: round(x * (dpi_user / dpi_ori)) 
     
     root.geometry(f"{scaled(610)}x{scaled(750)}")
     root.place_window_center()
