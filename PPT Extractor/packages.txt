@@ -1,0 +1,10 @@
+pip install python-pptx
+pip install tkinter
+pip install ttkbootstrap
+pip install PIL
+pip install pandastable
+pip install openpyxl
+pip install subprocess
+pip install os
+pip install re
+pip install pandas
