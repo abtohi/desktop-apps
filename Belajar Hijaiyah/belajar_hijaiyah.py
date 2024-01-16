@@ -1,0 +1,165 @@
+import ttkbootstrap as tb
+from PIL import Image, ImageTk
+import pygame
+
+class BelajarHijaiyah:
+    def __init__(self, root):
+        self.img_label = None
+        self.root = root
+        self.hurufsaatini = tb.StringVar()
+        self.frame3 = tb.Frame(self.root)
+        self.frame3.pack()
+
+        self.frame1 = tb.Frame(self.root)
+        self.frame1.pack()
+        self.frame2 = tb.Frame(self.root)
+        self.frame2.pack()
+
+        self.alphabet = [
+            {"id":0, "img":"001-alif"},
+            {"id":1, "img":"002-ba"},
+            {"id":2, "img":"003-taa"},
+            {"id":3, "img":"004-tha"},
+            {"id":4, "img":"005-jeem"},
+            {"id":5, "img":"006-haa"},
+            {"id":6, "img":"007-khaa"},
+            {"id":7, "img":"008-dal"},
+            {"id":8, "img":"009-dhal"},
+            {"id":9, "img":"010-raa"},
+            {"id":10, "img":"011-jaa"},
+            {"id":11, "img":"012-seen"},
+            {"id":12, "img":"013-sheen"},
+            {"id":13, "img":"014-saad"},
+            {"id":14, "img":"015-dhaad"},
+            {"id":15, "img":"016-toa"},
+            {"id":16, "img":"017-dhaa"},
+            {"id":17, "img":"018-ain"},
+            {"id":18, "img":"019-ghain"},
+            {"id":19, "img":"020-faa"},
+            {"id":20, "img":"021-qaaf"},
+            {"id":21, "img":"022-kaaf"},
+            {"id":22, "img":"023-laam"},
+            {"id":23, "img":"024-meem"},
+            {"id":24, "img":"025-noon"},
+            {"id":25, "img":"026-waw"},
+            {"id":26, "img":"027-ha"},
+            {"id":27, "img":"028-hamza"},
+            {"id":28, "img":"029-yaa"}
+            ]
+
+    def resize_image(self, image_path, scale_percent):
+        original_image = Image.open(image_path) # Buka gambar
+        width, height = original_image.size # Ambil ukuran gambar original
+
+        # Hitung ukuran baru berdasarkan persentase
+        new_width = int(width * scale_percent / 100)
+        new_height = int(height * scale_percent / 100)
+        resized_image = original_image.resize((new_width, new_height)) # Ubah ukuran gambar
+        return resized_image
+    
+    def btn_format(self, frame, image, id, r, c):
+        r_img = self.resize_image(f'images/{image}.jpg', 15)
+        img = ImageTk.PhotoImage(r_img)
+        l_img = tb.Button(frame, image=img, style="dark-outline", command=lambda: (self.play_sound(image),self.open_image(self.frame3, image, id)))
+        l_img.image = img
+        l_img.grid(row=r, column=c, padx=5, pady=5)
+
+    def play_sound(self, huruf):
+        pygame.mixer.init()
+        pygame.mixer.music.load(f"sound/{huruf}.mp3")  # Ganti dengan path file suara yang diinginkan
+        pygame.mixer.music.play()
+
+    def on_left_arrow(self, event):
+        curr = self.hurufsaatini.get()
+        moveto = int(curr)+1
+            
+        image = self.alphabet[moveto].get("img")
+        self.play_sound(image)
+
+        self.open_image(self.frame3, image, moveto)
+
+    def on_right_arrow(self, event):
+        curr = self.hurufsaatini.get()
+        moveto = int(curr)-1
+        image = self.alphabet[moveto].get("img")
+        self.play_sound(image)
+
+        self.open_image(self.frame3, image, moveto)
+
+    def open_image(self, frame, image, id):
+        r_img = self.resize_image(f'images/{image}.jpg', 200)
+        img = ImageTk.PhotoImage(r_img)
+
+        r_left = self.resize_image(f'images/left-arrow.png', 20)
+        left = ImageTk.PhotoImage(r_left)
+
+        r_right = self.resize_image(f'images/right-arrow.png', 20)
+        right = ImageTk.PhotoImage(r_right)
+
+        img_left = tb.Button(frame, image=left, style="dark-outline", command="Primary.TButton")
+        img_left.image = left
+        img_left.grid(row=0, column=0)
+
+        img_right = tb.Button(frame, image=right, style="dark-outline", command="Primary.TButton")
+        img_right.image = right
+        img_right.grid(row=0, column=2)
+
+        # Jika img_label sudah ada, ubah gambar di dalamnya
+        if self.img_label:
+            self.img_label.config(image=img)
+            self.img_label.image = img
+            if id == 28:
+                self.hurufsaatini.set(-1)
+            else:
+                self.hurufsaatini.set(id)
+
+        else:
+            # Jika img_label belum ada, buat label baru dan simpan referensinya
+            self.img_label = tb.Label(frame, image=img)
+            self.img_label.image = img
+            self.img_label.grid(row=0, column=1)
+
+        self.root.bind("<Left>", self.on_left_arrow)
+        self.root.bind("<Right>", self.on_right_arrow)
+    
+    def open_main_display(self):
+        #Button
+
+        r_img = self.resize_image(f'images/000.jpg', 200)
+        img = ImageTk.PhotoImage(r_img)
+
+        self.img_label = tb.Label(self.frame3, image=img)
+        self.img_label.image = img
+        self.img_label.grid(row=0, column=1)
+        
+        alphabet = self.alphabet
+        self.btn_format(self.frame1, alphabet[14].get("img"), alphabet[14].get("id"),0,0)
+        self.btn_format(self.frame1, alphabet[13].get("img"), alphabet[13].get("id"),0,1)
+        self.btn_format(self.frame1, alphabet[12].get("img"), alphabet[12].get("id"),0,2)
+        self.btn_format(self.frame1, alphabet[11].get("img"), alphabet[11].get("id"),0,3)
+        self.btn_format(self.frame1, alphabet[10].get("img"), alphabet[10].get("id"),0,4)
+        self.btn_format(self.frame1, alphabet[9].get("img"), alphabet[9].get("id"),0,5)
+        self.btn_format(self.frame1, alphabet[8].get("img"), alphabet[8].get("id"),0,6)
+        self.btn_format(self.frame1, alphabet[7].get("img"), alphabet[7].get("id"),0,7)
+        self.btn_format(self.frame1, alphabet[6].get("img"), alphabet[6].get("id"),0,8)
+        self.btn_format(self.frame1, alphabet[5].get("img"), alphabet[5].get("id"),0,9)
+        self.btn_format(self.frame1, alphabet[4].get("img"), alphabet[4].get("id"),0,10)
+        self.btn_format(self.frame1, alphabet[3].get("img"), alphabet[3].get("id"),0,11)
+        self.btn_format(self.frame1, alphabet[2].get("img"), alphabet[2].get("id"),0,12)
+        self.btn_format(self.frame1, alphabet[1].get("img"), alphabet[1].get("id"),0,13)
+        self.btn_format(self.frame1, alphabet[0].get("img"), alphabet[0].get("id"),0,14)
+
+        self.btn_format(self.frame2, alphabet[28].get("img"), alphabet[28].get("id"),0,0)
+        self.btn_format(self.frame2, alphabet[27].get("img"), alphabet[27].get("id"),0,1)
+        self.btn_format(self.frame2, alphabet[26].get("img"), alphabet[26].get("id"),0,2)
+        self.btn_format(self.frame2, alphabet[25].get("img"), alphabet[25].get("id"),0,3)
+        self.btn_format(self.frame2, alphabet[24].get("img"), alphabet[24].get("id"),0,4)
+        self.btn_format(self.frame2, alphabet[23].get("img"), alphabet[23].get("id"),0,5)
+        self.btn_format(self.frame2, alphabet[22].get("img"), alphabet[22].get("id"),0,6)
+        self.btn_format(self.frame2, alphabet[21].get("img"), alphabet[21].get("id"),0,7)
+        self.btn_format(self.frame2, alphabet[20].get("img"), alphabet[20].get("id"),0,8)
+        self.btn_format(self.frame2, alphabet[19].get("img"), alphabet[19].get("id"),0,9)
+        self.btn_format(self.frame2, alphabet[18].get("img"), alphabet[18].get("id"),0,10)
+        self.btn_format(self.frame2, alphabet[17].get("img"), alphabet[17].get("id"),0,11)
+        self.btn_format(self.frame2, alphabet[16].get("img"), alphabet[16].get("id"),0,12)
+        self.btn_format(self.frame2, alphabet[15].get("img"), alphabet[15].get("id"),0,13)
