@@ -59,7 +59,7 @@ class MainWindow:
     def btn_format(self, frame, frame2, image, r, c):
         r_alif = self.resize_image(f'images/{image}.jpg', 15)
         alif = ImageTk.PhotoImage(r_alif)
-        l_alif = tb.Button(frame, image=alif, command=lambda: (self.play_sound(image),self.open_image(frame2, image)))
+        l_alif = tb.Button(frame, image=alif, style="secondary", command=lambda: (self.play_sound(image),self.open_image(frame2, image)))
         l_alif.image = alif
         l_alif.grid(row=r, column=c, padx=5, pady=5)
 
@@ -84,12 +84,26 @@ class MainWindow:
     
     def open_main_display(self):
         #Button
+        frame3 = tb.Frame(root)
+        frame3.pack()
+        r_img = self.resize_image(f'images/000.jpg', 200)
+        img = ImageTk.PhotoImage(r_img)
+        # Jika img_label sudah ada, ubah gambar di dalamnya
+        if self.img_label:
+            self.img_label.config(image=img)
+            self.img_label.image = img
+        else:
+            # Jika img_label belum ada, buat label baru dan simpan referensinya
+            self.img_label = tb.Label(frame3, image=img)
+            self.img_label.image = img
+            self.img_label.pack()
+
+
         frame1 = tb.Frame(root)
         frame1.pack()
         frame2 = tb.Frame(root)
         frame2.pack()
-        frame3 = tb.Frame(root)
-        frame3.pack()
+        
         alphabets1 = ["001-alif","002-ba","003-taa","004-tha","005-jeem","006-haa","007-khaa","008-dal","009-dhal","010-raa","011-jaa","012-seen","013-sheen","014-saad","015-dhaad"]
         self.btn_format(frame1, frame3, alphabets1[14],0,0)
         self.btn_format(frame1, frame3, alphabets1[13],0,1)
