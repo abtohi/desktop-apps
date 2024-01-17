@@ -2,7 +2,7 @@ import ttkbootstrap as tb
 from PIL import Image, ImageTk
 import pygame
 
-from belajar_hijaiyah import BelajarHijaiyah
+from home import MainMenu
 
 def play_welcome_sound():
     pygame.mixer.init()
@@ -42,4 +42,4 @@ class WelcomeScreen:
         label.pack(pady=100)
 
         # Setelah beberapa detik, nonaktifkan gambar
-        self.root.after(4000, lambda: (label.pack_forget(), BelajarHijaiyah(self.root).open_main_display()))
+        self.root.after(3000, lambda: (label.pack_forget(), MainMenu(self.root)))

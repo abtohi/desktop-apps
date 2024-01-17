@@ -7,16 +7,19 @@ class BelajarHijaiyah:
         self.img_label = None
         self.root = root
         self.hurufsaatini = tb.StringVar()
-        self.frame3 = tb.Frame(self.root)
-        self.frame3.pack()
 
-        self.frame4 = tb.Frame(self.root)
-        self.frame4.place(x=935, y=650)
+        self.main_frame = tb.Frame(self.root)
+        self.main_frame.pack()
+        self.frame3 = tb.Frame(self.main_frame)
+        self.frame3.pack(pady=(50,0))
 
-        self.frame1 = tb.Frame(self.root)
-        self.frame1.place(x=250,y=800)
-        self.frame2 = tb.Frame(self.root)
-        self.frame2.place(x=300, y=890)
+        self.frame4 = tb.Frame(self.main_frame)
+        self.frame4.place(x=680, y=590)
+
+        self.frame1 = tb.Frame(self.main_frame)
+        self.frame1.pack(pady=(70,10))
+        self.frame2 = tb.Frame(self.main_frame)
+        self.frame2.pack()
 
         self.alphabet = [
             {"id":0, "img":"001-alif"},
@@ -97,13 +100,13 @@ class BelajarHijaiyah:
         self.play_sound(image)
         
     def open_image(self, frame, image, id):
-        r_img = self.resize_image(f'images/{image}.jpg', 180)
+        r_img = self.resize_image(f'images/{image}.jpg', 150)
         img = ImageTk.PhotoImage(r_img)
 
-        r_left = self.resize_image(f'images/left-arrow.png', 20)
+        r_left = self.resize_image(f'images/left-arrow.png', 13)
         left = ImageTk.PhotoImage(r_left)
 
-        r_right = self.resize_image(f'images/right-arrow.png', 20)
+        r_right = self.resize_image(f'images/right-arrow.png', 13)
         right = ImageTk.PhotoImage(r_right)
 
         r_play = self.resize_image(f'images/play.jpg', 13)
@@ -120,6 +123,9 @@ class BelajarHijaiyah:
         img_play = tb.Button(self.frame4, image=play, style="dark-outline", command=lambda: self.play_sound(image))
         img_play.image = play
         img_play.grid(row=1, column=1)
+
+        title = tb.Label(self.main_frame, text="Belajar Huruf Hijaiyah", font=("Helvetica",40))
+        title.place(x=445, y=10)
 
         # Jika img_label sudah ada, ubah gambar di dalamnya
         if self.img_label:
