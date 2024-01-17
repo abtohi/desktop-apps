@@ -9,8 +9,8 @@ class MainMenu:
 
 if __name__ == "__main__":
     root = tb.Window()
-    welcome_screen = WelcomeScreen(root)
-    #BelajarHijaiyah(root).open_main_display()
+    #welcome_screen = WelcomeScreen(root)
+    BelajarHijaiyah(root).open_main_display()
     resw = root.winfo_screenwidth()
     resh = root.winfo_screenheight()
     root.geometry(f'{resw}x{resh}')

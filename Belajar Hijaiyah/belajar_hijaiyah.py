@@ -10,10 +10,13 @@ class BelajarHijaiyah:
         self.frame3 = tb.Frame(self.root)
         self.frame3.pack()
 
+        self.frame4 = tb.Frame(self.root)
+        self.frame4.place(x=935, y=650)
+
         self.frame1 = tb.Frame(self.root)
-        self.frame1.pack()
+        self.frame1.place(x=250,y=800)
         self.frame2 = tb.Frame(self.root)
-        self.frame2.pack()
+        self.frame2.place(x=300, y=890)
 
         self.alphabet = [
             {"id":0, "img":"001-alif"},
@@ -60,34 +63,43 @@ class BelajarHijaiyah:
     def btn_format(self, frame, image, id, r, c):
         r_img = self.resize_image(f'images/{image}.jpg', 15)
         img = ImageTk.PhotoImage(r_img)
-        l_img = tb.Button(frame, image=img, style="dark-outline", command=lambda: (self.play_sound(image),self.open_image(self.frame3, image, id)))
+        l_img = tb.Button(frame, image=img, style="dark-outline", command=lambda: self.play_and_open(image, id))
         l_img.image = img
         l_img.grid(row=r, column=c, padx=5, pady=5)
+
+    def play_and_open(self, image, id):
+        #self.play_sound(image)
+        self.open_image(self.frame3, image, id)
 
     def play_sound(self, huruf):
         pygame.mixer.init()
         pygame.mixer.music.load(f"sound/{huruf}.mp3")  # Ganti dengan path file suara yang diinginkan
         pygame.mixer.music.play()
 
-    def on_left_arrow(self, event):
+    def on_left_arrow(self):
         curr = self.hurufsaatini.get()
         moveto = int(curr)+1
             
         image = self.alphabet[moveto].get("img")
-        self.play_sound(image)
+        #self.play_sound(image)
 
         self.open_image(self.frame3, image, moveto)
 
-    def on_right_arrow(self, event):
+    def on_right_arrow(self):
         curr = self.hurufsaatini.get()
         moveto = int(curr)-1
         image = self.alphabet[moveto].get("img")
-        self.play_sound(image)
+        #self.play_sound(image)
 
         self.open_image(self.frame3, image, moveto)
-
+    
+    def on_updown_pressed(self):
+        curr = self.hurufsaatini.get()
+        image = self.alphabet[int(curr)].get("img")
+        self.play_sound(image)
+        
     def open_image(self, frame, image, id):
-        r_img = self.resize_image(f'images/{image}.jpg', 200)
+        r_img = self.resize_image(f'images/{image}.jpg', 180)
         img = ImageTk.PhotoImage(r_img)
 
         r_left = self.resize_image(f'images/left-arrow.png', 20)
@@ -96,13 +108,20 @@ class BelajarHijaiyah:
         r_right = self.resize_image(f'images/right-arrow.png', 20)
         right = ImageTk.PhotoImage(r_right)
 
-        img_left = tb.Button(frame, image=left, style="dark-outline", command="Primary.TButton")
+        r_play = self.resize_image(f'images/play.jpg', 13)
+        play = ImageTk.PhotoImage(r_play)
+
+        img_left = tb.Button(frame, image=left, style="dark-outline", command=self.on_left_arrow)
         img_left.image = left
         img_left.grid(row=0, column=0)
 
-        img_right = tb.Button(frame, image=right, style="dark-outline", command="Primary.TButton")
+        img_right = tb.Button(frame, image=right, style="dark-outline", command=self.on_right_arrow)
         img_right.image = right
         img_right.grid(row=0, column=2)
+
+        img_play = tb.Button(self.frame4, image=play, style="dark-outline", command=lambda: self.play_sound(image))
+        img_play.image = play
+        img_play.grid(row=1, column=1)
 
         # Jika img_label sudah ada, ubah gambar di dalamnya
         if self.img_label:
@@ -119,13 +138,15 @@ class BelajarHijaiyah:
             self.img_label.image = img
             self.img_label.grid(row=0, column=1)
 
-        self.root.bind("<Left>", self.on_left_arrow)
-        self.root.bind("<Right>", self.on_right_arrow)
+        self.root.bind("<Left>", lambda event:self.on_left_arrow())
+        self.root.bind("<Right>", lambda event:self.on_right_arrow())
+        self.root.bind("<Up>", lambda event:self.on_updown_pressed())
+        self.root.bind("<Down>", lambda event:self.on_updown_pressed())
     
     def open_main_display(self):
         #Button
 
-        r_img = self.resize_image(f'images/000.jpg', 200)
+        r_img = self.resize_image(f'images/000.jpg', 150)
         img = ImageTk.PhotoImage(r_img)
 
         self.img_label = tb.Label(self.frame3, image=img)
