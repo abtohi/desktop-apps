@@ -1,6 +1,7 @@
 import ttkbootstrap as tb
-from PIL import Image, ImageTk
+from PIL import ImageTk
 import pygame
+from funcs import resize_image
 
 from home import MainMenu
 
@@ -18,23 +19,14 @@ class WelcomeScreen:
         play_welcome_sound()
         self.show_animation()
 
-    def resize_image(self, image_path, scale_percent):
-        original_image = Image.open(image_path) # Buka gambar
-        width, height = original_image.size # Ambil ukuran gambar original
-
-        # Hitung ukuran baru berdasarkan persentase
-        new_width = int(width * scale_percent / 100)
-        new_height = int(height * scale_percent / 100)
-        resized_image = original_image.resize((new_width, new_height)) # Ubah ukuran gambar
-        return resized_image
 
     def show_animation(self):
         # Tambahkan animasi di sini menggunakan modul Pillow (PIL)
         # Contoh: Menampilkan gambar selamat datang
-        image_path = "images/welcome.jpg" 
+        image_path = "images/others/welcome.jpg" 
         scale_percent = 80  # Persentase ukuran baru (80% dari ukuran original)
 
-        resized_image = self.resize_image(image_path, scale_percent)
+        resized_image = resize_image(image_path, scale_percent)
         photo = ImageTk.PhotoImage(resized_image)
 
         label = tb.Label(self.root, image=photo)

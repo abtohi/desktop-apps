@@ -1,6 +1,8 @@
 import ttkbootstrap as tb
-from PIL import Image, ImageTk
+from PIL import ImageTk
 import pygame
+from alphabet import alphabet
+from funcs import resize_image, home_icon
 
 class BelajarHijaiyah:
     def __init__(self, root):
@@ -20,51 +22,9 @@ class BelajarHijaiyah:
         self.frame1.pack(pady=(70,10))
         self.frame2 = tb.Frame(self.main_frame)
         self.frame2.pack()
-
-        self.alphabet = [
-            {"id":0, "img":"001-alif"},
-            {"id":1, "img":"002-ba"},
-            {"id":2, "img":"003-taa"},
-            {"id":3, "img":"004-tha"},
-            {"id":4, "img":"005-jeem"},
-            {"id":5, "img":"006-haa"},
-            {"id":6, "img":"007-khaa"},
-            {"id":7, "img":"008-dal"},
-            {"id":8, "img":"009-dhal"},
-            {"id":9, "img":"010-raa"},
-            {"id":10, "img":"011-jaa"},
-            {"id":11, "img":"012-seen"},
-            {"id":12, "img":"013-sheen"},
-            {"id":13, "img":"014-saad"},
-            {"id":14, "img":"015-dhaad"},
-            {"id":15, "img":"016-toa"},
-            {"id":16, "img":"017-dhaa"},
-            {"id":17, "img":"018-ain"},
-            {"id":18, "img":"019-ghain"},
-            {"id":19, "img":"020-faa"},
-            {"id":20, "img":"021-qaaf"},
-            {"id":21, "img":"022-kaaf"},
-            {"id":22, "img":"023-laam"},
-            {"id":23, "img":"024-meem"},
-            {"id":24, "img":"025-noon"},
-            {"id":25, "img":"026-waw"},
-            {"id":26, "img":"027-ha"},
-            {"id":27, "img":"028-hamza"},
-            {"id":28, "img":"029-yaa"}
-            ]
-
-    def resize_image(self, image_path, scale_percent):
-        original_image = Image.open(image_path) # Buka gambar
-        width, height = original_image.size # Ambil ukuran gambar original
-
-        # Hitung ukuran baru berdasarkan persentase
-        new_width = int(width * scale_percent / 100)
-        new_height = int(height * scale_percent / 100)
-        resized_image = original_image.resize((new_width, new_height)) # Ubah ukuran gambar
-        return resized_image
     
     def btn_format(self, frame, image, id, r, c):
-        r_img = self.resize_image(f'images/{image}.jpg', 15)
+        r_img = resize_image(f'images/alphabet/{image}.jpg', 15)
         img = ImageTk.PhotoImage(r_img)
         l_img = tb.Button(frame, image=img, style="dark-outline", command=lambda: self.play_and_open(image, id))
         l_img.image = img
@@ -83,33 +43,33 @@ class BelajarHijaiyah:
         curr = self.hurufsaatini.get()
         moveto = int(curr)+1
             
-        image = self.alphabet[moveto].get("img")
+        image = alphabet[moveto].get("img")
         #self.play_sound(image)
         self.open_image(self.frame3, image, moveto)
 
     def on_right_arrow(self):
         curr = self.hurufsaatini.get()
         moveto = int(curr)-1
-        image = self.alphabet[moveto].get("img")
+        image = alphabet[moveto].get("img")
         #self.play_sound(image)
         self.open_image(self.frame3, image, moveto)
     
     def on_updown_pressed(self):
         curr = self.hurufsaatini.get()
-        image = self.alphabet[int(curr)].get("img")
+        image = alphabet[int(curr)].get("img")
         self.play_sound(image)
         
     def open_image(self, frame, image, id):
-        r_img = self.resize_image(f'images/{image}.jpg', 150)
+        r_img = resize_image(f'images/alphabet/{image}.jpg', 150)
         img = ImageTk.PhotoImage(r_img)
 
-        r_left = self.resize_image(f'images/left-arrow.png', 13)
+        r_left = resize_image(f'images/icon/left-arrow.png', 13)
         left = ImageTk.PhotoImage(r_left)
 
-        r_right = self.resize_image(f'images/right-arrow.png', 13)
+        r_right = resize_image(f'images/icon/right-arrow.png', 13)
         right = ImageTk.PhotoImage(r_right)
 
-        r_play = self.resize_image(f'images/play.jpg', 13)
+        r_play = resize_image(f'images/icon/play.jpg', 13)
         play = ImageTk.PhotoImage(r_play)
 
         img_left = tb.Button(frame, image=left, style="dark-outline", command=self.on_left_arrow)
@@ -148,14 +108,15 @@ class BelajarHijaiyah:
         self.root.bind("<Down>", lambda event:self.on_updown_pressed())
     
     def open_main_display(self):
-        r_img = self.resize_image(f'images/000.jpg', 150)
+        r_img = resize_image(f'images/others/000.jpg', 150)
         img = ImageTk.PhotoImage(r_img)
 
         self.img_label = tb.Label(self.frame3, image=img)
         self.img_label.image = img
         self.img_label.grid(row=0, column=1)
+
+        home_icon(self.root, self.main_frame)
         
-        alphabet = self.alphabet
         for i in range(0,15):
             self.btn_format(self.frame1, alphabet[14-i].get("img"), alphabet[14-i].get("id"),0,i)
 
