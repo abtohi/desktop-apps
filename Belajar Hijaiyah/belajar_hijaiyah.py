@@ -82,6 +82,7 @@ class BelajarHijaiyah:
             
         image = self.alphabet[moveto].get("img")
         #self.play_sound(image)
+        print(image,curr)
 
         self.open_image(self.frame3, image, moveto)
 
@@ -90,12 +91,14 @@ class BelajarHijaiyah:
         moveto = int(curr)-1
         image = self.alphabet[moveto].get("img")
         #self.play_sound(image)
+        print(image,curr)
 
         self.open_image(self.frame3, image, moveto)
     
     def on_updown_pressed(self):
         curr = self.hurufsaatini.get()
         image = self.alphabet[int(curr)].get("img")
+        print(image,curr)
         self.play_sound(image)
         
     def open_image(self, frame, image, id):
@@ -138,6 +141,8 @@ class BelajarHijaiyah:
             self.img_label.image = img
             self.img_label.grid(row=0, column=1)
 
+        print(image, id, self.hurufsaatini.get())
+
         self.root.bind("<Left>", lambda event:self.on_left_arrow())
         self.root.bind("<Right>", lambda event:self.on_right_arrow())
         self.root.bind("<Up>", lambda event:self.on_updown_pressed())
@@ -154,33 +159,9 @@ class BelajarHijaiyah:
         self.img_label.grid(row=0, column=1)
         
         alphabet = self.alphabet
-        self.btn_format(self.frame1, alphabet[14].get("img"), alphabet[14].get("id"),0,0)
-        self.btn_format(self.frame1, alphabet[13].get("img"), alphabet[13].get("id"),0,1)
-        self.btn_format(self.frame1, alphabet[12].get("img"), alphabet[12].get("id"),0,2)
-        self.btn_format(self.frame1, alphabet[11].get("img"), alphabet[11].get("id"),0,3)
-        self.btn_format(self.frame1, alphabet[10].get("img"), alphabet[10].get("id"),0,4)
-        self.btn_format(self.frame1, alphabet[9].get("img"), alphabet[9].get("id"),0,5)
-        self.btn_format(self.frame1, alphabet[8].get("img"), alphabet[8].get("id"),0,6)
-        self.btn_format(self.frame1, alphabet[7].get("img"), alphabet[7].get("id"),0,7)
-        self.btn_format(self.frame1, alphabet[6].get("img"), alphabet[6].get("id"),0,8)
-        self.btn_format(self.frame1, alphabet[5].get("img"), alphabet[5].get("id"),0,9)
-        self.btn_format(self.frame1, alphabet[4].get("img"), alphabet[4].get("id"),0,10)
-        self.btn_format(self.frame1, alphabet[3].get("img"), alphabet[3].get("id"),0,11)
-        self.btn_format(self.frame1, alphabet[2].get("img"), alphabet[2].get("id"),0,12)
-        self.btn_format(self.frame1, alphabet[1].get("img"), alphabet[1].get("id"),0,13)
-        self.btn_format(self.frame1, alphabet[0].get("img"), alphabet[0].get("id"),0,14)
+        for i in range(0,15):
+            self.btn_format(self.frame1, alphabet[14-i].get("img"), alphabet[14-i].get("id"),0,i)
 
-        self.btn_format(self.frame2, alphabet[28].get("img"), alphabet[28].get("id"),0,0)
-        self.btn_format(self.frame2, alphabet[27].get("img"), alphabet[27].get("id"),0,1)
-        self.btn_format(self.frame2, alphabet[26].get("img"), alphabet[26].get("id"),0,2)
-        self.btn_format(self.frame2, alphabet[25].get("img"), alphabet[25].get("id"),0,3)
-        self.btn_format(self.frame2, alphabet[24].get("img"), alphabet[24].get("id"),0,4)
-        self.btn_format(self.frame2, alphabet[23].get("img"), alphabet[23].get("id"),0,5)
-        self.btn_format(self.frame2, alphabet[22].get("img"), alphabet[22].get("id"),0,6)
-        self.btn_format(self.frame2, alphabet[21].get("img"), alphabet[21].get("id"),0,7)
-        self.btn_format(self.frame2, alphabet[20].get("img"), alphabet[20].get("id"),0,8)
-        self.btn_format(self.frame2, alphabet[19].get("img"), alphabet[19].get("id"),0,9)
-        self.btn_format(self.frame2, alphabet[18].get("img"), alphabet[18].get("id"),0,10)
-        self.btn_format(self.frame2, alphabet[17].get("img"), alphabet[17].get("id"),0,11)
-        self.btn_format(self.frame2, alphabet[16].get("img"), alphabet[16].get("id"),0,12)
-        self.btn_format(self.frame2, alphabet[15].get("img"), alphabet[15].get("id"),0,13)
+        for i in range(0,14):
+            nilai = 28-i
+            self.btn_format(self.frame2, alphabet[nilai].get("img"), alphabet[nilai].get("id"),0,i)
