@@ -82,8 +82,6 @@ class BelajarHijaiyah:
             
         image = self.alphabet[moveto].get("img")
         #self.play_sound(image)
-        print(image,curr)
-
         self.open_image(self.frame3, image, moveto)
 
     def on_right_arrow(self):
@@ -91,14 +89,11 @@ class BelajarHijaiyah:
         moveto = int(curr)-1
         image = self.alphabet[moveto].get("img")
         #self.play_sound(image)
-        print(image,curr)
-
         self.open_image(self.frame3, image, moveto)
     
     def on_updown_pressed(self):
         curr = self.hurufsaatini.get()
         image = self.alphabet[int(curr)].get("img")
-        print(image,curr)
         self.play_sound(image)
         
     def open_image(self, frame, image, id):
@@ -141,16 +136,12 @@ class BelajarHijaiyah:
             self.img_label.image = img
             self.img_label.grid(row=0, column=1)
 
-        print(image, id, self.hurufsaatini.get())
-
         self.root.bind("<Left>", lambda event:self.on_left_arrow())
         self.root.bind("<Right>", lambda event:self.on_right_arrow())
         self.root.bind("<Up>", lambda event:self.on_updown_pressed())
         self.root.bind("<Down>", lambda event:self.on_updown_pressed())
     
     def open_main_display(self):
-        #Button
-
         r_img = self.resize_image(f'images/000.jpg', 150)
         img = ImageTk.PhotoImage(r_img)
 

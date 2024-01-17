@@ -31,7 +31,7 @@ class WelcomeScreen:
     def show_animation(self):
         # Tambahkan animasi di sini menggunakan modul Pillow (PIL)
         # Contoh: Menampilkan gambar selamat datang
-        image_path = "images/welcome.jpg"  # Ganti dengan path gambar yang diinginkan
+        image_path = "images/welcome.jpg" 
         scale_percent = 80  # Persentase ukuran baru (80% dari ukuran original)
 
         resized_image = self.resize_image(image_path, scale_percent)
