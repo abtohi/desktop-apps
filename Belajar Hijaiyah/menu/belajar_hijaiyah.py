@@ -1,8 +1,8 @@
 import ttkbootstrap as tb
 from PIL import ImageTk
 import pygame
-from alphabet import alphabet
-from funcs import resize_image, home_icon, play_sound, stop_sound
+from configure.alphabet import alphabet
+from configure.funcs import resize_image, home_icon, play_sound, stop_sound
 
 class BelajarHijaiyah:
     def __init__(self, root):
@@ -40,7 +40,7 @@ class BelajarHijaiyah:
     def play_and_open(self, image, id):
         if self.play_status.get() == True:
             self.play_status.set(True)
-            self.play_sound(image)
+            self.play_sound(f'alphabet/{image}')
         self.open_image(self.frame3, image, id)
 
     def play_sound(self, huruf):
@@ -55,7 +55,7 @@ class BelajarHijaiyah:
         image = alphabet[moveto].get("img")
         if self.play_status.get() == True:
             self.play_status.set(True)
-            self.play_sound(image)
+            self.play_sound(f'alphabet/{image}')
         self.open_image(self.frame3, image, moveto)
 
     def on_right_arrow(self):
@@ -64,13 +64,13 @@ class BelajarHijaiyah:
         image = alphabet[moveto].get("img")
         if self.play_status.get() == True:
             self.play_status.set(True)
-            self.play_sound(image)
+            self.play_sound(f'alphabet/{image}')
         self.open_image(self.frame3, image, moveto)
     
     def on_updown_pressed(self):
         curr = self.hurufsaatini.get()
         image = alphabet[int(curr)].get("img")
-        self.play_sound(image)
+        self.play_sound(f'alphabet/{image}')
         
     def open_image(self, frame, image, id):
         self.autoplaycheck.grid(row=1, column=1, pady=(90,0))
@@ -105,7 +105,7 @@ class BelajarHijaiyah:
 
         r_play = resize_image(f'images/icon/play.jpg', 11)
         play = ImageTk.PhotoImage(r_play)
-        img_play = tb.Button(self.frame4, image=play, style="dark-outline", command=lambda: self.play_sound(image))
+        img_play = tb.Button(self.frame4, image=play, style="dark-outline", command=lambda: self.play_sound(f'alphabet/{image}'))
         img_play.image = play
         img_play.grid(row=1, column=1)
 

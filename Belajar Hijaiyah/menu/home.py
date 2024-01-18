@@ -1,11 +1,11 @@
 import ttkbootstrap as tb
 from threading import Thread
-from funcs import *
+from configure.funcs import *
 
-from belajar_hijaiyah import BelajarHijaiyah
-from acak_huruf import AcakHuruf
-from quiz_hijaiyah import QuizHijaiyah
-from animasi import SmoothMoveImageLabel
+from menu.belajar_hijaiyah import BelajarHijaiyah
+from menu.acak_huruf import AcakHuruf
+from menu.quiz_hijaiyah import QuizHijaiyah
+from display.animasi import SmoothMoveImageLabel
 
 class MainMenu:
     def __init__(self, root):

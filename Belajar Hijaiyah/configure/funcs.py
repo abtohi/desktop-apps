@@ -35,7 +35,7 @@ def close_opsional(obj, tipe):
 
 def destroy(root, main_frame):
     main_frame.pack_forget()
-    from home import MainMenu
+    from menu.home import MainMenu
     MainMenu(root)
 
 def dp_button_grid(frame, path, scale, r, c, comm=None):

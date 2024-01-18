@@ -1,5 +1,5 @@
 import ttkbootstrap as tb
-from funcs import *
+from configure.funcs import *
 
 class QuizHijaiyah:
     def __init__(self, root):

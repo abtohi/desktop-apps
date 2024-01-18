@@ -2,10 +2,10 @@ import ttkbootstrap as tb
 import os
 from PIL import Image, ImageTk
 
-from welcome_screen import WelcomeScreen
-from home import MainMenu
-from belajar_hijaiyah import BelajarHijaiyah
-from acak_huruf import AcakHuruf
+from display.welcome_screen import WelcomeScreen
+from menu.home import MainMenu
+from menu.belajar_hijaiyah import BelajarHijaiyah
+from menu.acak_huruf import AcakHuruf
 
 if __name__ == "__main__":
     root = tb.Window()

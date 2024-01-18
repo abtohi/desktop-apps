@@ -1,6 +1,5 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from funcs import resize_image
 
 class SmoothMoveImageLabel(tk.Label):
     def __init__(self, master=None, **kwargs):

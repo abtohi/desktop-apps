@@ -1,9 +1,9 @@
 import ttkbootstrap as tb
 from PIL import ImageTk
 import pygame
-from funcs import resize_image
+from configure.funcs import resize_image
 
-from home import MainMenu
+from menu.home import MainMenu
 
 def play_welcome_sound():
     pygame.mixer.init()

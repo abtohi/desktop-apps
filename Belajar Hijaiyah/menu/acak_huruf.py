@@ -2,8 +2,8 @@ import ttkbootstrap as tb
 from ttkbootstrap.dialogs import Messagebox
 import random
 from PIL import ImageTk
-from alphabet import alphabet
-from funcs import *
+from configure.alphabet import alphabet
+from configure.funcs import *
 
 class AcakHuruf:
     def __init__(self, root):
@@ -83,7 +83,7 @@ class AcakHuruf:
                         imagepath = f'images/alphabet/{image}.jpg'
                         r_img = resize_image(imagepath, 100)
                         img = ImageTk.PhotoImage(r_img)
-                        lbl_img = tb.Button(self.frame2, image=img, command=lambda img=image: play_sound(img), bootstyle="secondary-outline")
+                        lbl_img = tb.Button(self.frame2, image=img, command=lambda img=image: play_sound(f'alphabet/{img}'), bootstyle="secondary-outline")
                         lbl_img.image = img
                         lbl_img.grid(row=0, column=counter, padx=10)
                         counter+=1
