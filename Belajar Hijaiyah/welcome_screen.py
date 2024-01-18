@@ -19,11 +19,10 @@ class WelcomeScreen:
         play_welcome_sound()
         self.show_animation()
 
-
     def show_animation(self):
         # Tambahkan animasi di sini menggunakan modul Pillow (PIL)
         # Contoh: Menampilkan gambar selamat datang
-        image_path = "images/others/welcome.jpg" 
+        image_path = "images/others/welcome.png" 
         scale_percent = 80  # Persentase ukuran baru (80% dari ukuran original)
 
         resized_image = resize_image(image_path, scale_percent)
@@ -31,7 +30,7 @@ class WelcomeScreen:
 
         label = tb.Label(self.root, image=photo)
         label.image = photo
-        label.pack(pady=100)
+        label.pack(pady=30)
 
         # Setelah beberapa detik, nonaktifkan gambar
         self.root.after(3000, lambda: (label.pack_forget(), MainMenu(self.root)))

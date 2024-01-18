@@ -7,10 +7,10 @@ from acak_huruf import AcakHuruf
 
 if __name__ == "__main__":
     root = tb.Window()
-    #welcome_screen = WelcomeScreen(root)
+    welcome_screen = WelcomeScreen(root)
     #MainMenu(root)
     #BelajarHijaiyah(root).open_main_display()
-    AcakHuruf(root)
+    #AcakHuruf(root)
     resw = root.winfo_screenwidth()
     resh = root.winfo_screenheight()
     root.geometry(f'{resw}x{resh}')

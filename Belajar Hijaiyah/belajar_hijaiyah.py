@@ -108,7 +108,7 @@ class BelajarHijaiyah:
         self.root.bind("<Down>", lambda event:self.on_updown_pressed())
     
     def open_main_display(self):
-        r_img = resize_image(f'images/others/000.jpg', 150)
+        r_img = resize_image(f'images/others/000.png', 150)
         img = ImageTk.PhotoImage(r_img)
 
         self.img_label = tb.Label(self.frame3, image=img)
