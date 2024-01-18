@@ -7,9 +7,9 @@ from acak_huruf import AcakHuruf
 
 if __name__ == "__main__":
     root = tb.Window()
-    #welcome_screen = WelcomeScreen(root)
+    #WelcomeScreen(root)
     #MainMenu(root)
-    #BelajarHijaiyah(root).open_main_display()
+    #BelajarHijaiyah(root)
     AcakHuruf(root)
     resw = root.winfo_screenwidth()
     resh = root.winfo_screenheight()

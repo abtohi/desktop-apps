@@ -15,7 +15,7 @@ def resize_image(image_path, scale_percent):
 def home_icon(root, main_frame, need_to_close=None,tipe=None):
     r_home = resize_image(f'images/icon/home.jpg', 15)
     home = ImageTk.PhotoImage(r_home)
-    img_home = tb.Button(root, image=home, style="dark-outline", command=lambda: (destroy(root, main_frame), img_home.place_forget(), close_opsional(need_to_close, tipe), disable_bind(root)))
+    img_home = tb.Button(root, image=home, style="dark-outline", command=lambda:(img_home.place_forget(),destroy(root, main_frame),close_opsional(need_to_close, tipe),disable_bind(root), play_sound("effects/btn-close")))
     img_home.image = home
     img_home.place(x=30, y=30)
 
@@ -61,5 +61,15 @@ def dp_button_place(frame, path, scale, xnum, ynum, comm):
 
 def play_sound(huruf):
     pygame.mixer.init()
-    pygame.mixer.music.load(f"sound/{huruf}.mp3")  # Ganti dengan path file suara yang diinginkan
+    pygame.mixer.music.load(f"sound/{huruf}.mp3")
     pygame.mixer.music.play()
+
+def stop_sound():
+    pygame.mixer.stop()
+
+def play_backsound():
+    pygame.mixer.init()
+    audio_path = f"sound/others/backsound.mp3"
+    sound = pygame.mixer.Sound(audio_path)
+    sound.play()
+

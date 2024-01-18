@@ -18,32 +18,39 @@ class AcakHuruf:
 
         self.frame2 = tb.Frame(self.main_frame)
         self.frame2.pack()
+        play_sound('/effects/btn-open')
+        self.root.after(1000, stop_sound())
+        self.open_display()
 
-        self.title = tb.Label(self.frame1, text="Acak Huruf Hijaiyah", font=("Helvetica",40))
-        self.title.pack(pady=(60,150))
+    def open_display(self):
+        title = tb.Label(self.frame1, text="Acak Huruf Hijaiyah", font=("comic sans ms",40))
+        title.pack(pady=(30,200))
 
         self.limit = tb.BooleanVar()
         self.limit.set(False)
 
-        self.checklimit = tb.Checkbutton(self.main_frame, variable=self.limit, text="Limitasi", bootstyle="secondary-outline-toolbutton", command=self.oncheck_limit)
-        self.checklimit.place(x=740, y=150, width=80, height=35)
+        style = tb.Style()
+        style.configure('secondary.Outline.TButton', font=("comic sans ms",13), width=25)
 
-        self.spinbox1 = tb.Spinbox(self.main_frame,from_=1, to=29, font=("Helvetica",13), state="disable")
-        self.spinbox1.place(x=830,y=150, width=60)
+        checklimit = tb.Checkbutton(self.main_frame, variable=self.limit, text="Limitasi", style="secondary.Outline.TButton", command=self.oncheck_limit)
+        checklimit.place(x=740, y=150, width=100, height=38)
+
+        self.spinbox1 = tb.Spinbox(self.main_frame,from_=1, to=29, font=("comic sans ms",13), state="disable")
+        self.spinbox1.place(x=850,y=150, width=60)
         self.spinbox1.set(1)
 
-        self.to = tb.Label(self.main_frame, text="to", font=("Helvetica",13))
-        self.to.place(x=920, y=150)
+        to = tb.Label(self.main_frame, text="to", font=("comic sans ms",13))
+        to.place(x=930, y=150)
 
-        self.spinbox2 = tb.Spinbox(self.main_frame,from_=1, to=29, font=("Helvetica",13), state="disable")
+        self.spinbox2 = tb.Spinbox(self.main_frame,from_=1, to=29, font=("comic sans ms",13), state="disable")
         self.spinbox2.place(x=970,y=150, width=60)
         self.spinbox2.set(29)
 
         r_img = resize_image(f'images/icon/random.jpg', 17)
         img = ImageTk.PhotoImage(r_img)
-        btn_img = tb.Button(root, image=img, style="dark-outline", command=self.acak_gambar)
+        btn_img = tb.Button(self.root, image=img, style="dark-outline", command=self.acak_gambar)
         btn_img.image = img
-        btn_img.place(x=925, y=730)
+        btn_img.place(x=925, y=790)
         
         home_icon(self.root, self.main_frame, btn_img, "place")
         self.acak_gambar()

@@ -2,7 +2,7 @@ import ttkbootstrap as tb
 from PIL import ImageTk
 import pygame
 from alphabet import alphabet
-from funcs import resize_image, home_icon
+from funcs import resize_image, home_icon, play_sound, stop_sound
 
 class BelajarHijaiyah:
     def __init__(self, root):
@@ -84,8 +84,8 @@ class BelajarHijaiyah:
         img_play.image = play
         img_play.grid(row=1, column=1)
 
-        title = tb.Label(self.main_frame, text="Belajar Huruf Hijaiyah", font=("Helvetica",40))
-        title.place(x=445, y=10)
+        title = tb.Label(self.main_frame, text="Belajar Huruf Hijaiyah", font=("comic sans ms",40))
+        title.place(x=445, y=30)
 
         # Jika img_label sudah ada, ubah gambar di dalamnya
         if self.img_label:
@@ -107,6 +107,8 @@ class BelajarHijaiyah:
         self.root.bind("<Down>", lambda event:self.on_updown_pressed())
     
     def open_main_display(self):
+        play_sound('effects/btn-open')
+        self.root.after(1000, stop_sound())
         r_img = resize_image(f'images/others/000.png', 150)
         img = ImageTk.PhotoImage(r_img)
 

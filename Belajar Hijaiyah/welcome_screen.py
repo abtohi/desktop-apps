@@ -7,7 +7,7 @@ from home import MainMenu
 
 def play_welcome_sound():
     pygame.mixer.init()
-    pygame.mixer.music.load("sound/welcome.mp3")  # Ganti dengan path file suara yang diinginkan
+    pygame.mixer.music.load("sound/others/welcome.mp3")  # Ganti dengan path file suara yang diinginkan
     pygame.mixer.music.play()
 
 class WelcomeScreen:
