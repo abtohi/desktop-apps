@@ -15,16 +15,22 @@ def resize_image(image_path, scale_percent):
 def home_icon(root, main_frame, need_to_close=None,tipe=None):
     r_home = resize_image(f'images/icon/home.jpg', 15)
     home = ImageTk.PhotoImage(r_home)
-    img_home = tb.Button(root, image=home, style="dark-outline", command=lambda: (destroy(root, main_frame), img_home.place_forget(), close_opsional(need_to_close, tipe)))
+    img_home = tb.Button(root, image=home, style="dark-outline", command=lambda: (destroy(root, main_frame), img_home.place_forget(), close_opsional(need_to_close, tipe), disable_bind(root)))
     img_home.image = home
     img_home.place(x=30, y=30)
+
+def disable_bind(root):
+    root.unbind("<Left>")
+    root.unbind("<Right>")
+    root.unbind("<Up>")
+    root.unbind("<Down>")
 
 def close_opsional(obj, tipe):
     if tipe == "grid":
         obj.grid_forget()
     elif tipe == "place":
         obj.place_forget()
-    else:
+    elif tipe == "pack":
         obj.pack_forget()
 
 def destroy(root, main_frame):

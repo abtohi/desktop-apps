@@ -1,6 +1,7 @@
 import ttkbootstrap as tb
 from belajar_hijaiyah import BelajarHijaiyah
 from acak_huruf import AcakHuruf
+from quiz_hijaiyah import QuizHijaiyah
 
 class MainMenu:
     def __init__(self, root):
@@ -41,5 +42,7 @@ class MainMenu:
             AcakHuruf(self.root)
         elif menu_type == "Quiz":
             self.main_frame.pack_forget()
+            QuizHijaiyah(self.root)
+
         else:
             self.root.destroy()
