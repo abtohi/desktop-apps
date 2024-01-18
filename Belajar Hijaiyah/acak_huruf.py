@@ -26,24 +26,24 @@ class AcakHuruf:
         self.limit.set(False)
 
         self.checklimit = tb.Checkbutton(self.main_frame, variable=self.limit, text="Limitasi", bootstyle="secondary-outline-toolbutton", command=self.oncheck_limit)
-        self.checklimit.place(x=640, y=150, width=80, height=35)
+        self.checklimit.place(x=740, y=150, width=80, height=35)
 
         self.spinbox1 = tb.Spinbox(self.main_frame,from_=1, to=29, font=("Helvetica",13), state="disable")
-        self.spinbox1.place(x=730,y=150, width=60)
+        self.spinbox1.place(x=830,y=150, width=60)
         self.spinbox1.set(1)
 
         self.to = tb.Label(self.main_frame, text="to", font=("Helvetica",13))
-        self.to.place(x=820, y=150)
+        self.to.place(x=920, y=150)
 
         self.spinbox2 = tb.Spinbox(self.main_frame,from_=1, to=29, font=("Helvetica",13), state="disable")
-        self.spinbox2.place(x=870,y=150, width=60)
+        self.spinbox2.place(x=970,y=150, width=60)
         self.spinbox2.set(29)
 
         r_img = resize_image(f'images/icon/random.jpg', 17)
         img = ImageTk.PhotoImage(r_img)
         btn_img = tb.Button(root, image=img, style="dark-outline", command=self.acak_gambar)
         btn_img.image = img
-        btn_img.place(x=925, y=690)
+        btn_img.place(x=925, y=730)
         
         home_icon(self.root, self.main_frame, btn_img, "place")
         self.acak_gambar()
@@ -64,6 +64,7 @@ class AcakHuruf:
         counter = 0
         bottom = int(self.spinbox1.get())
         top = int(self.spinbox2.get())
+        lbl_img = None
 
         if top-bottom >=3:
             try:
@@ -73,12 +74,17 @@ class AcakHuruf:
                         listangka.append(selected_number)
                         image = alphabet[selected_number].get("img")
                         imagepath = f'images/alphabet/{image}.jpg'
-                        dp_label_grid(self.frame2, imagepath, 100, 0, counter)
+                        r_img = resize_image(imagepath, 100)
+                        img = ImageTk.PhotoImage(r_img)
+                        lbl_img = tb.Button(self.frame2, image=img, command=lambda img=image: play_sound(img), bootstyle="secondary-outline")
+                        lbl_img.image = img
+                        lbl_img.grid(row=0, column=counter, padx=10)
                         counter+=1
             except Exception as e:
                 Messagebox.show_error(title="Pesan Error",message="Silahkan masukkan angka limitasi yang valid", parent=self.main_frame)
         else:
             Messagebox.show_error(title="Pesan Error",message="Silahkan masukkan angka limitasi yang valid", parent=self.main_frame)
+        
      
     def acakangka(self, bottom, top):
         limitstatus = self.limit.get()

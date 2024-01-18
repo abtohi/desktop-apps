@@ -95,7 +95,6 @@ class BelajarHijaiyah:
                 self.hurufsaatini.set(-1)
             else:
                 self.hurufsaatini.set(id)
-
         else:
             # Jika img_label belum ada, buat label baru dan simpan referensinya
             self.img_label = tb.Label(frame, image=img)
