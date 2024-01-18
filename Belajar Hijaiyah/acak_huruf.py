@@ -30,7 +30,7 @@ class AcakHuruf:
         self.limit.set(False)
 
         style = tb.Style()
-        style.configure('secondary.Outline.TButton', font=("comic sans ms",13), width=25)
+        style.configure('secondary.Outline.TButton', font=("comic sans ms",10))
 
         checklimit = tb.Checkbutton(self.main_frame, variable=self.limit, text="Limitasi", style="secondary.Outline.TButton", command=self.oncheck_limit)
         checklimit.place(x=740, y=150, width=100, height=38)

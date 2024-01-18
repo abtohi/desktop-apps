@@ -5,18 +5,45 @@ from funcs import *
 from belajar_hijaiyah import BelajarHijaiyah
 from acak_huruf import AcakHuruf
 from quiz_hijaiyah import QuizHijaiyah
+from animasi import SmoothMoveImageLabel
 
 class MainMenu:
     def __init__(self, root):
         self.root = root
+        
+        #START BACKGROUND
+        # Load the image and get its size
+        image_path = "images/others/bg.png"  # Ganti dengan path gambar PNG Anda
+        self.original_image = Image.open(image_path)
+        self.image_width, self.image_height = self.original_image.size
+
+        # Get the screen size
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+
+        # Resize the image to fit the screen without cropping
+        self.resized_image = self.original_image.resize((screen_width, screen_height), Image.ADAPTIVE)
+
+        # Create a Tkinter-compatible photo image
+        self.photo = ImageTk.PhotoImage(self.resized_image)
+
+        # Create a label with the image
+        self.background_label = tb.Label(root, image=self.photo)
+        self.background_label.place(relwidth=1, relheight=1)
+
+        #END BACKGROUND
+
         self.main_frame = tb.Frame(root)
-        self.main_frame.pack()
+        self.main_frame.pack(fill="x")
 
         frame_title = tb.Frame(self.main_frame)
         frame_title.pack()
 
-        title_welcome = tb.Label(frame_title, text="Selamat Belajar", font=("comic sans ms",45))
-        title_welcome.pack(pady=(70,200))
+        title_welcome = tb.Label(frame_title, text="Selamat Datang di Alifbacaku", font=("comic sans ms",45))
+        title_welcome.pack(pady=(70,5))
+
+        subtitle_welcome = tb.Label(frame_title, text="Aplikasi Pintar untuk Memudahkan Anak Belajar Mengaji\ndan Mengenal Dasar-dasar Huruf Hijaiyah dengan Kreativitas dan Kesenangan", font=("comic sans ms",20),justify='center', anchor='center')
+        subtitle_welcome.pack(pady=(0,138))
 
         frame_menu1 = tb.Frame(self.main_frame)
         frame_menu1.pack()
@@ -47,16 +74,26 @@ class MainMenu:
         backsound_thread = Thread(target=play_backsound)
         backsound_thread.start()
 
+        # Menjalankan animasi
+        self.animated_label = SmoothMoveImageLabel(root)
+        self.animated_label.place(x=1550, y=540)
+
     def clicked_menu(self, menu_type):
         if menu_type == "Belajar":
             self.main_frame.pack_forget()
+            self.animated_label.place_forget()
             BelajarHijaiyah(self.root).open_main_display()
+            self.background_label.place_forget()
         elif menu_type == "Acak":
             self.main_frame.pack_forget()
+            self.animated_label.place_forget()
             AcakHuruf(self.root)
+            self.background_label.place_forget()
         elif menu_type == "Quiz":
             self.main_frame.pack_forget()
+            self.animated_label.place_forget()
             QuizHijaiyah(self.root)
+            self.background_label.place_forget()
 
         else:
             self.root.destroy()
